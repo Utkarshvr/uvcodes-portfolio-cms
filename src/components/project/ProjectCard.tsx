@@ -32,15 +32,21 @@ function shortenStr(str: string, maxLength: number) {
 export default function ProjectCard({ project }: { project: ProjectType }) {
   if (!project?.id) return <p>Project ID not available</p>;
   return (
-    <Card className="w-[400px]">
+    <Card
+      className={`w-[400px] ${
+        !project.isPublished && "dark:bg-slate-700 bg-slate-300"
+      }`}
+    >
       <CardHeader>
         <CardTitle className="flex flex-row gap-2 items-center">
           <img
             src={project?.icon}
             className="h-9 rounded-full w-9 object-contain"
           />
-
-          {project.title}
+          {project.title}{" "}
+          {!project.isPublished && (
+            <p className="bg-slate-800 p-2 rounded-md text-slate-400 text-xs font-bold">un-published</p>
+          )}
         </CardTitle>
         <CardDescription>
           {project.description && project.description.length > 30
@@ -68,7 +74,7 @@ export default function ProjectCard({ project }: { project: ProjectType }) {
           <CarouselNext className="right-[-5%] z-50" />
         </Carousel>
         <div className="flex flex-row justify-center w-full gap-2 items-center">
-          <Link to={project.source_code}  target="_blank">
+          <Link to={project.source_code} target="_blank">
             <Button variant="link">Source</Button>
           </Link>
           <Link to={project.visit_link} target="_blank">

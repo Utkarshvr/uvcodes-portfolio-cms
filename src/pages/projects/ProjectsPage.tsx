@@ -38,7 +38,7 @@ export default function ProjectsPage() {
         </Link>
       </div>
 
-      <main className="flex flex-row flex-wrap gap-4">
+      <main className="flex flex-row flex-wrap justify-center gap-4 items-center">
         {projects.map((p) => (
           <ProjectCard project={p} />
         ))}{" "}
