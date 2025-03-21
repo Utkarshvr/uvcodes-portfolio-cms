@@ -6,6 +6,7 @@ import {
   getDocs,
   setDoc,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "./setup";
 import ProjectType from "@/type/ProjectType";
@@ -194,3 +195,26 @@ export async function deleteFB(collection_name: string, id: string) {
     return { isSuccess: false, error: error as FirebaseError };
   }
 }
+
+export const updateProjectOrder = async (projects: ProjectType[]) => {
+  const batch = writeBatch(db);
+
+  projects.forEach((project, index) => {
+    if (!project.id) {
+      console.error("Project ID is undefined:", project);
+      return;
+    }
+
+    const projectRef = doc(db, "projects", project.id);
+    batch.update(projectRef, { position: index });
+  });
+
+  try {
+    await batch.commit();
+    console.log("Project order updated successfully");
+    return true;
+  } catch (error) {
+    console.error("Error updating project order:", error);
+    return false;
+  }
+};
